@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/firebase_database_url,@string/gcm_defaultSenderId,@string/google_storage_bucket,@string/project_id,@string/google_api_key,@string/google_crash_reporting_api_key,@string/google_app_id,@string/default_android_client_id,@string/default_web_client_id">
+  <string name="firebase_database_url" translatable="false">https://mydearrock-3c1ef-default-rtdb.firebaseio.com</string>
+  <string name="gcm_defaultSenderId" translatable="false">817798312400</string>
+  <string name="google_storage_bucket" translatable="false">mydearrock-3c1ef.firebasestorage.app</string>
+  <string name="project_id" translatable="false">mydearrock-3c1ef</string>
+  <string name="google_api_key" translatable="false">AIzaSyB4mOUNxEbe16vtJcufcKBlUk6etoxhhWI</string>
+  <string name="google_crash_reporting_api_key" translatable="false">AIzaSyB4mOUNxEbe16vtJcufcKBlUk6etoxhhWI</string>
+  <string name="google_app_id" translatable="false">1:817798312400:android:07309fdd2238b8d33c89d5</string>
+  <string name="default_android_client_id" translatable="false">817798312400-i1k88pt2qb2iermfb49or4suf4ros6ur.apps.googleusercontent.com</string>
+  <string name="default_web_client_id" translatable="false">817798312400-s9ga6975aefitsve8dujqhg160hm9s92.apps.googleusercontent.com</string>
+</resources>

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "817798312400",
+    "firebase_url": "https://mydearrock-3c1ef-default-rtdb.firebaseio.com",
+    "project_id": "mydearrock-3c1ef",
+    "storage_bucket": "mydearrock-3c1ef.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:817798312400:android:07309fdd2238b8d33c89d5",
+        "android_client_info": {
+          "package_name": "com.OneJump.MyDearRockV3"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "817798312400-i1k88pt2qb2iermfb49or4suf4ros6ur.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.OneJump.MyDearRockV3",
+            "certificate_hash": "e5cb92ea053dcb880c0ac099a7499afd91d57a3a"
+          }
+        },
+        {
+          "client_id": "817798312400-s9ga6975aefitsve8dujqhg160hm9s92.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4mOUNxEbe16vtJcufcKBlUk6etoxhhWI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "817798312400-s9ga6975aefitsve8dujqhg160hm9s92.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
