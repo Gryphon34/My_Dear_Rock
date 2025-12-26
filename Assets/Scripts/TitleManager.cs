@@ -1,12 +1,12 @@
-using UnityEngine;
-using UnityEngine.SceneManagement;
-using System.Threading.Tasks;
-using TMPro;
 using Firebase.Auth;
 using Google;
 using System;
+using System.Threading.Tasks;
+using TMPro;
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using UnityEngine.InputSystem;
 
 public class TitleManager : MonoBehaviour
 {
@@ -43,9 +43,11 @@ public class TitleManager : MonoBehaviour
 
     void Update()
     {
-        // Input.GetMouseButtonDown(0) 대신 새로운 방식을 사용합니다.
-        if (isReadyToStart && !isTransitioning && Pointer.current.press.wasPressedThisFrame)
+        if (isReadyToStart && !isTransitioning && Input.GetMouseButtonDown(0))
         {
+            // UI 버튼을 누르는 중이면 리턴 (로그인 버튼 클릭과 겹치지 않게 함)
+            if (EventSystem.current.IsPointerOverGameObject()) return;
+
             StartGameSequence();
         }
     }

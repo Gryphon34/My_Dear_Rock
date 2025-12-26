@@ -31,11 +31,13 @@ public class RockTouch : MonoBehaviour
         targetScale = originalScale;
     }
 
-    private void OnPointerDown(PointerEventData eventData)
+    private void OnMouseDown()
     {
         // UI 클릭 중이거나 상점이 열려있으면 소리도 재생하지 않음
-        if (EventSystem.current.IsPointerOverGameObject()) return;
+        //if (EventSystem.current.IsPointerOverGameObject()) return;
         if (ShopManager.Instance != null && ShopManager.Instance.shopPanel.activeInHierarchy) return;
+
+        Debug.Log("돌 클릭 감지됨!"); // 확인용 로그 추가
 
         // 1. 조약돌 지급
         if (GameManager.Instance != null) GameManager.Instance.AddPebbles(1);

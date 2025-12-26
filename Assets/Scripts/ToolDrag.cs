@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems; // 추가 필수
 
-public class ToolDrag : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler
+public class ToolDrag : MonoBehaviour
 {
     private Vector3 startPos;
     private Camera mainCam;
@@ -13,23 +13,22 @@ public class ToolDrag : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
         mainCam = Camera.main;
     }
 
-    // OnMouseDown 대체
-    public void OnPointerDown(PointerEventData eventData)
+    // [수정] 인터페이스 함수들을 OnMouseDown/Drag/Up으로 복구
+    private void OnMouseDown()
     {
         zDistance = mainCam.WorldToScreenPoint(transform.position).z;
     }
 
-    // OnMouseDrag 대체
-    public void OnDrag(PointerEventData eventData)
+    private void OnMouseDrag()
     {
-        Vector3 mousePos = eventData.position; // New Input 방식의 좌표
+        // [수정] eventData 대신 Input.mousePosition을 직접 사용합니다.
+        Vector3 mousePos = Input.mousePosition;
         mousePos.z = zDistance;
         Vector3 worldPos = mainCam.ScreenToWorldPoint(mousePos);
         transform.position = new Vector3(worldPos.x, worldPos.y, 0f);
     }
 
-    // OnMouseUp 대체
-    public void OnPointerUp(PointerEventData eventData)
+    private void OnMouseUp()
     {
         transform.position = startPos;
     }
