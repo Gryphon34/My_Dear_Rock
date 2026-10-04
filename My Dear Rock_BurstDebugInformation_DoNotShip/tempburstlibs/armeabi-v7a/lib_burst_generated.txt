@@ -12,7 +12,8 @@ Library: D:\Unity\My_Dear_Rock\Temp\BurstOutput\tempburstlibs\armeabi-v7a\lib_bu
 --float-mode=Fast
 --generate-link-xml=Temp\burst.link.xml
 --temp-folder=D:\Unity\My_Dear_Rock\Temp\Burst
---key-folder=C:/Program Files/Unity/Hub/Editor/6000.3.0f1/Editor/Data/PlaybackEngines/AndroidPlayer
+--debug=Full
+--key-folder=D:/UUnity/Hub/Editor/6000.3.15f1/Editor/Data/PlaybackEngines/AndroidPlayer
 --decode-folder=D:\Unity\My_Dear_Rock\Library\Burst
 --output=D:\Unity\My_Dear_Rock\Temp\BurstOutput\tempburstlibs\armeabi-v7a\lib_burst_generated
 --pdb-search-paths=Temp/ManagedSymbols/
@@ -30,7 +31,8 @@ Library: D:\Unity\My_Dear_Rock\Temp\BurstOutput\tempburstlibs\armeabi-v7a\lib_bu
 --target-framework=NetFramework
 --generate-link-xml=Temp\burst.link.xml
 --temp-folder=D:\Unity\My_Dear_Rock\Temp\Burst
---key-folder=C:/Program Files/Unity/Hub/Editor/6000.3.0f1/Editor/Data/PlaybackEngines/AndroidPlayer
+--debug=Full
+--key-folder=D:/UUnity/Hub/Editor/6000.3.15f1/Editor/Data/PlaybackEngines/AndroidPlayer
 --decode-folder=D:\Unity\My_Dear_Rock\Library\Burst
 --output=D:\Unity\My_Dear_Rock\Temp\BurstOutput\tempburstlibs\armeabi-v7a\lib_burst_generated
 --pdb-search-paths=Temp/ManagedSymbols/

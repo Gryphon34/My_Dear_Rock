@@ -3,46 +3,54 @@ using UnityEngine.EventSystems;
 
 public class RockTouch : MonoBehaviour
 {
-    [Header("¼Ò¸® ¼³Á¤")]
-    public AudioSource audioSource; // [Ãß°¡] ¼Ò¸®¸¦ Àç»ıÇÒ ÄÄÆ÷³ÍÆ®
-    public AudioClip touchSound;    // [Ãß°¡] Àç»ıÇÒ µ¹ Å¬¸¯ ¼Ò¸®
+    [Header("ì†Œë¦¬ ì„¤ì •")]
+    public AudioSource audioSource; // [ì¶”ê°€] ì†Œë¦¬ë¥¼ ì¬ìƒí•  ì»´í¬ë„ŒíŠ¸
+    public AudioClip touchSound;    // [ì¶”ê°€] ì¬ìƒí•  ëŒ í´ë¦­ ì†Œë¦¬
 
-    [Header("ÀÌÆåÆ® ¼³Á¤")]
+    [Header("ì´í™íŠ¸ ì„¤ì •")]
     public Transform effectSpawnPoint;
 
-    [Header("µ¹¸æÀÌ ¿¬Ãâ")]
+    [Header("ëŒë©©ì´ ì—°ì¶œ")]
     public float squatAmount = 0.8f;
     public float smooth = 15f;
     private Vector3 originalScale;
     private Vector3 targetScale;
+    private Collider myCollider;
 
     void Start()
     {
         originalScale = transform.localScale;
         targetScale = originalScale;
+        myCollider = GetComponent<Collider>();
 
-        // [Ãß°¡] AudioSource°¡ ¿¬°á ¾È µÇ¾î ÀÖ´Ù¸é ÀÚµ¿À¸·Î °¡Á®¿À±â ½Ãµµ
+        // [ì¶”ê°€] AudioSourceê°€ ì—°ê²° ì•ˆ ë˜ì–´ ìˆë‹¤ë©´ ìë™ìœ¼ë¡œ ê°€ì ¸ì˜¤ê¸° ì‹œë„
         if (audioSource == null) audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
     {
+        // OnMouseDown ëŒ€ì‹  ì§ì ‘ ë ˆì´ìºìŠ¤íŠ¸ (ëª¨ë°”ì¼ í„°ì¹˜ / ì…ë ¥ ì„¤ì •ê³¼ ë¬´ê´€í•˜ê²Œ ë™ì‘)
+        if (PointerInput.PressedThisFrame && PointerInput.HitsCollider(Camera.main, myCollider))
+        {
+            OnRockTouched();
+        }
+
         transform.localScale = Vector3.Lerp(transform.localScale, targetScale, Time.deltaTime * smooth);
         targetScale = originalScale;
     }
 
-    private void OnMouseDown()
+    private void OnRockTouched()
     {
-        // UI Å¬¸¯ ÁßÀÌ°Å³ª »óÁ¡ÀÌ ¿­·ÁÀÖÀ¸¸é ¼Ò¸®µµ Àç»ıÇÏÁö ¾ÊÀ½
+        // UI í´ë¦­ ì¤‘ì´ê±°ë‚˜ ìƒì ì´ ì—´ë ¤ìˆìœ¼ë©´ ì†Œë¦¬ë„ ì¬ìƒí•˜ì§€ ì•ŠìŒ
         //if (EventSystem.current.IsPointerOverGameObject()) return;
         if (ShopManager.Instance != null && ShopManager.Instance.shopPanel.activeInHierarchy) return;
 
-        Debug.Log("µ¹ Å¬¸¯ °¨ÁöµÊ!"); // È®ÀÎ¿ë ·Î±× Ãß°¡
+        Debug.Log("ëŒ í´ë¦­ ê°ì§€ë¨!"); // í™•ì¸ìš© ë¡œê·¸ ì¶”ê°€
 
-        // 1. Á¶¾àµ¹ Áö±Ş
+        // 1. ì¡°ì•½ëŒ ì§€ê¸‰
         if (GameManager.Instance != null) GameManager.Instance.AddPebbles(1);
 
-        // 2. ¼Ò¸® Àç»ı
+        // 2. ì†Œë¦¬ ì¬ìƒ
         if (audioSource != null && touchSound != null)
         {
             audioSource.volume = SettingsManager.Instance.sfxVolume;
@@ -50,10 +58,10 @@ public class RockTouch : MonoBehaviour
             audioSource.PlayOneShot(touchSound);
         }
 
-        // 3. °íÁ¤ À§Ä¡¿¡ ÀÌÆåÆ® »ı¼º
+        // 3. ê³ ì • ìœ„ì¹˜ì— ì´í™íŠ¸ ìƒì„±
         SpawnTouchEffect();
 
-        // 4. Âî±×·¯Áü È¿°ú
+        // 4. ì°Œê·¸ëŸ¬ì§ íš¨ê³¼
         targetScale = new Vector3(originalScale.x / squatAmount, originalScale.y * squatAmount, originalScale.z / squatAmount);
     }
 

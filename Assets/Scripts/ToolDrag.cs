@@ -1,35 +1,43 @@
 using UnityEngine;
-using UnityEngine.EventSystems; // Ãß°¡ ÇÊ¼ö
+using UnityEngine.EventSystems; // ì¶”ê°€ í•„ìˆ˜
 
 public class ToolDrag : MonoBehaviour
 {
     private Vector3 startPos;
     private Camera mainCam;
     private float zDistance;
+    private Collider myCollider;
+    private bool isDragging;
 
     void Start()
     {
         startPos = transform.position;
         mainCam = Camera.main;
+        myCollider = GetComponent<Collider>();
     }
 
-    // [¼öÁ¤] ÀÎÅÍÆäÀÌ½º ÇÔ¼öµéÀ» OnMouseDown/Drag/UpÀ¸·Î º¹±¸
-    private void OnMouseDown()
+    // OnMouseDown/Drag/Up ëŒ€ì‹  PointerInputìœ¼ë¡œ ì§ì ‘ ì²˜ë¦¬ (ëª¨ë°”ì¼ í„°ì¹˜ ëŒ€ì‘)
+    void Update()
     {
-        zDistance = mainCam.WorldToScreenPoint(transform.position).z;
-    }
+        if (!isDragging && PointerInput.PressedThisFrame && PointerInput.HitsCollider(mainCam, myCollider))
+        {
+            isDragging = true;
+            zDistance = mainCam.WorldToScreenPoint(transform.position).z;
+        }
 
-    private void OnMouseDrag()
-    {
-        // [¼öÁ¤] eventData ´ë½Å Input.mousePositionÀ» Á÷Á¢ »ç¿ëÇÕ´Ï´Ù.
-        Vector3 mousePos = Input.mousePosition;
-        mousePos.z = zDistance;
-        Vector3 worldPos = mainCam.ScreenToWorldPoint(mousePos);
-        transform.position = new Vector3(worldPos.x, worldPos.y, 0f);
-    }
+        if (!isDragging) return;
 
-    private void OnMouseUp()
-    {
-        transform.position = startPos;
+        if (PointerInput.IsPressed)
+        {
+            Vector3 mousePos = PointerInput.Position;
+            mousePos.z = zDistance;
+            Vector3 worldPos = mainCam.ScreenToWorldPoint(mousePos);
+            transform.position = new Vector3(worldPos.x, worldPos.y, 0f);
+        }
+        else
+        {
+            isDragging = false;
+            transform.position = startPos;
+        }
     }
 }

@@ -10,17 +10,17 @@ using UnityEngine.UI;
 
 public class TitleManager : MonoBehaviour
 {
-    [Header("UI ¿¬°á")]
+    [Header("UI ì—°ê²°")]
     public GameObject loginButtonsGroup;
     public GameObject startPanel;
     public TMP_Text statusText;
 
-    [Header("È¿°ú ¿¬°á")]
+    [Header("íš¨ê³¼ ì—°ê²°")]
     public RectTransform touchTextTransform;
     public CanvasGroup fadeCanvasGroup;
 
-    [Header("±¸±Û ·Î±×ÀÎ ¼³Á¤")]
-    public string webClientId = "¿©±â¿¡_À¥_Å¬¶óÀÌ¾ğÆ®_ID_ÀÔ·Â";
+    [Header("êµ¬ê¸€ ë¡œê·¸ì¸ ì„¤ì •")]
+    public string webClientId = "ì—¬ê¸°ì—_ì›¹_í´ë¼ì´ì–¸íŠ¸_ID_ì…ë ¥";
 
     private bool isReadyToStart = false;
     private bool isTransitioning = false;
@@ -43,9 +43,9 @@ public class TitleManager : MonoBehaviour
 
     void Update()
     {
-        if (isReadyToStart && !isTransitioning && Input.GetMouseButtonDown(0))
+        if (isReadyToStart && !isTransitioning && PointerInput.PressedThisFrame)
         {
-            // UI ¹öÆ°À» ´©¸£´Â ÁßÀÌ¸é ¸®ÅÏ (·Î±×ÀÎ ¹öÆ° Å¬¸¯°ú °ãÄ¡Áö ¾Ê°Ô ÇÔ)
+            // UI ë²„íŠ¼ì„ ëˆ„ë¥´ëŠ” ì¤‘ì´ë©´ ë¦¬í„´ (ë¡œê·¸ì¸ ë²„íŠ¼ í´ë¦­ê³¼ ê²¹ì¹˜ì§€ ì•Šê²Œ í•¨)
             if (EventSystem.current.IsPointerOverGameObject()) return;
 
             StartGameSequence();
@@ -65,7 +65,7 @@ public class TitleManager : MonoBehaviour
     {
 #if UNITY_EDITOR
         await Task.Yield();
-        HandleLoginSuccess("editor_test_id", "¿¡µğÅÍ Å×½ºÆ® À¯Àú");
+        HandleLoginSuccess("editor_test_id", "ì—ë””í„° í…ŒìŠ¤íŠ¸ ìœ ì €");
 #else
         GoogleSignInConfiguration config = new GoogleSignInConfiguration {
             WebClientId = webClientId, RequestIdToken = true
@@ -76,7 +76,7 @@ public class TitleManager : MonoBehaviour
             GoogleSignInUser googleUser = await GoogleSignIn.DefaultInstance.SignIn();
             Credential credential = GoogleAuthProvider.GetCredential(googleUser.IdToken, null);
             
-            // [ÅëÇÕ ÇØ°á] Å¸ÀÔÀ» Á÷Á¢ ¸í½ÃÇÏÁö ¾Ê°í TaskÀÇ °á°ú¸¦ ¸®ÇÃ·º¼ÇÀ¸·Î Ã³¸®ÇÕ´Ï´Ù.
+            // [í†µí•© í•´ê²°] íƒ€ì…ì„ ì§ì ‘ ëª…ì‹œí•˜ì§€ ì•Šê³  Taskì˜ ê²°ê³¼ë¥¼ ë¦¬í”Œë ‰ì…˜ìœ¼ë¡œ ì²˜ë¦¬í•©ë‹ˆë‹¤.
             var task = FirebaseAuth.DefaultInstance.SignInWithCredentialAsync(credential);
             await task;
             object result = task.GetType().GetProperty("Result").GetValue(task);
@@ -109,7 +109,7 @@ public class TitleManager : MonoBehaviour
         try
         {
             statusText.text = "Guest Login Attempt...";
-            // [ÅëÇÕ ÇØ°á] SettingsManager¿Í µ¿ÀÏÇÑ ¿ìÈ¸ ¹æ½ÄÀ» Àû¿ëÇÕ´Ï´Ù.
+            // [í†µí•© í•´ê²°] SettingsManagerì™€ ë™ì¼í•œ ìš°íšŒ ë°©ì‹ì„ ì ìš©í•©ë‹ˆë‹¤.
             var task = FirebaseAuth.DefaultInstance.SignInAnonymouslyAsync();
             await task;
             object result = task.GetType().GetProperty("Result").GetValue(task);
@@ -131,7 +131,7 @@ public class TitleManager : MonoBehaviour
         catch (Exception e)
         {
             statusText.text = "Login Failed";
-            Debug.LogError(e.Message); // CS0168 °æ°í ÇØ°á
+            Debug.LogError(e.Message); // CS0168 ê²½ê³  í•´ê²°
         }
     }
 
