@@ -78,3 +78,11 @@ crashlytics-build.properties
 *.keystore
 *.jks
 google-services.json
+
+# Unity build by-products (debug symbols / IL2CPP backups)
+*.symbols.zip
+*_BackUpThisFolder_ButDontShipItWithYourGame/
+*_BurstDebugInformation_DoNotShip/
+
+# IDE
+.idea/
