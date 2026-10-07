@@ -8,13 +8,19 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
-    [Header("UI ¿¬°á")]
+    [Header("UI ì—°ê²°")]
     public TMP_Text pebbleText;
 
-    [Header("°ÔÀÓ µ¥ÀÌÅÍ")]
+    [Header("ê²Œìž„ ë°ì´í„°")]
     public int pebbleCount = 0;
     private string userId;
     private DatabaseReference dbReference;
+
+    [Header("ì‹œì—°ìš© ì¹˜íŠ¸ (Development Buildì—ì„œë§Œ ë™ìž‘)")]
+    public int demoBonusAmount = 10000;
+    public int demoTapCount = 5;      // ì¡°ì•½ëŒ ê°œìˆ˜ í…ìŠ¤íŠ¸ë¥¼ ì´ íšŸìˆ˜ë§Œí¼ ì—°ì† í„°ì¹˜í•˜ë©´ ì§€ê¸‰
+    private int demoTaps;
+    private float lastDemoTapTime;
 
     void Awake()
     {
@@ -24,22 +30,38 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        // 1. TitleManager¿¡¼­ ÀúÀåÇÑ °íÀ¯ ID¸¦ °¡Á®¿È
+        // 1. TitleManagerì—ì„œ ì €ìž¥í•œ ê³ ìœ  IDë¥¼ ê°€ì ¸ì˜´
         userId = PlayerPrefs.GetString("FirebaseUserId", "");
 
         if (!string.IsNullOrEmpty(userId))
         {
-            // 2. ¼­¹ö¿¡¼­ ±âÁ¸ µ¥ÀÌÅÍ ·Îµå
+            // 2. ì„œë²„ì—ì„œ ê¸°ì¡´ ë°ì´í„° ë¡œë“œ
             LoadDataFromCloud(userId);
         }
     }
 
-    // [Ãß°¡] ¼­¹ö¿¡ »óÁ¡ µ¥ÀÌÅÍ¸¦ ÅëÂ°·Î ÀúÀåÇÏ´Â ÇÔ¼ö
+    void Update()
+    {
+        // ì‹œì—°ìš©: ì¡°ì•½ëŒ ê°œìˆ˜ í…ìŠ¤íŠ¸ë¥¼ ë¹ ë¥´ê²Œ ì—°ì† í„°ì¹˜í•˜ë©´ ì¡°ì•½ëŒ ì§€ê¸‰ (ì¶œì‹œ ë¹Œë“œì—ì„œëŠ” ë™ìž‘ ì•ˆ í•¨)
+        if (!Debug.isDebugBuild || pebbleText == null || !PointerInput.PressedThisFrame) return;
+        if (!RectTransformUtility.RectangleContainsScreenPoint(pebbleText.rectTransform, PointerInput.Position, null)) return;
+
+        if (Time.unscaledTime - lastDemoTapTime > 0.5f) demoTaps = 0;
+        lastDemoTapTime = Time.unscaledTime;
+
+        if (++demoTaps >= demoTapCount)
+        {
+            demoTaps = 0;
+            AddPebbles(demoBonusAmount);
+        }
+    }
+
+    // [ì¶”ê°€] ì„œë²„ì— ìƒì  ë°ì´í„°ë¥¼ í†µì§¸ë¡œ ì €ìž¥í•˜ëŠ” í•¨ìˆ˜
     public void SaveShopDataToCloud(string jsonStoreData)
     {
         if (!string.IsNullOrEmpty(userId))
         {
-            // users > [UID] > shopData °æ·Î¿¡ JSON ¹®ÀÚ¿­·Î ÀúÀåÇÕ´Ï´Ù.
+            // users > [UID] > shopData ê²½ë¡œì— JSON ë¬¸ìžì—´ë¡œ ì €ìž¥í•©ë‹ˆë‹¤.
             dbReference.Child("users").Child(userId).Child("shopData").SetRawJsonValueAsync(jsonStoreData);
         }
     }
@@ -50,25 +72,25 @@ public class GameManager : MonoBehaviour
         {
             DataSnapshot snapshot = await dbReference.Child("users").Child(uid).GetValueAsync();
 
-            // 1. Á¶¾àµ¹ °³¼ö ·Îµå
+            // 1. ì¡°ì•½ëŒ ê°œìˆ˜ ë¡œë“œ
             if (snapshot.HasChild("pebbles"))
             {
                 pebbleCount = int.Parse(snapshot.Child("pebbles").Value.ToString());
                 UpdatePebbleUI();
             }
 
-            // 2. »óÁ¡ µ¥ÀÌÅÍ ·Îµå (Ãß°¡µÊ)
+            // 2. ìƒì  ë°ì´í„° ë¡œë“œ (ì¶”ê°€ë¨)
             if (snapshot.HasChild("shopData"))
             {
                 string json = snapshot.Child("shopData").GetRawJsonValue();
-                // ShopManager¿¡°Ô ¼­¹ö¿¡¼­ ¹ÞÀº µ¥ÀÌÅÍ¸¦ Àû¿ëÇÏ¶ó°í Àü´ÞÇÕ´Ï´Ù.
+                // ShopManagerì—ê²Œ ì„œë²„ì—ì„œ ë°›ì€ ë°ì´í„°ë¥¼ ì ìš©í•˜ë¼ê³  ì „ë‹¬í•©ë‹ˆë‹¤.
                 ShopManager.Instance?.ApplyCloudShopData(json);
             }
         }
-        catch (Exception e) { Debug.LogError("µ¥ÀÌÅÍ ·Îµå ½ÇÆÐ: " + e.Message); }
+        catch (Exception e) { Debug.LogError("ë°ì´í„° ë¡œë“œ ì‹¤íŒ¨: " + e.Message); }
     }
 
-    // [Áß¿ä] µ¹ Å¬¸¯(1°³) ¹× Ã»¼Ò ¿Ï·á(100°³) ½Ã È£Ãâ
+    // [ì¤‘ìš”] ëŒ í´ë¦­(1ê°œ) ë° ì²­ì†Œ ì™„ë£Œ(100ê°œ) ì‹œ í˜¸ì¶œ
     public void AddPebbles(int amount)
     {
         pebbleCount += amount;
@@ -76,7 +98,7 @@ public class GameManager : MonoBehaviour
         SavePebblesToCloud();
     }
 
-    // [Áß¿ä] »óÁ¡ ¾ÆÀÌÅÛ ±¸¸Å ½Ã È£Ãâ
+    // [ì¤‘ìš”] ìƒì  ì•„ì´í…œ êµ¬ë§¤ ì‹œ í˜¸ì¶œ
     public bool SpendPebbles(int amount)
     {
         if (pebbleCount >= amount)
